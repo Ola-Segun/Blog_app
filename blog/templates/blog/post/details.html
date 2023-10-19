@@ -1,0 +1,161 @@
+{% extends 'blog/base.html' %}
+{% load blog_tags %}
+
+{% block title %}{{post.title}}{% endblock %}
+
+<style>
+  .comments{
+    margin-bottom: 1rem;
+  }
+
+  .post-body{
+    margin-top: 3rem;
+  }
+
+  .details{
+    color: #fff;
+  }
+</style>
+
+{% block content %}
+
+<main class="container">
+
+    <div class="row g-5">
+      <div class="col-md-8">
+
+        <div class="title">
+          <h1>{{ posts.title }}</h1>
+          {% if posts.image %}
+          <figure class="head-image">
+            <img src="{{ posts.image.url }}" alt="" style="width: 60%;" class="rounded-4 shadow">
+          </figure>
+          {% endif %}
+          <p class="date">
+              Published {{ posts.publish }} by {{ posts.author }}
+          </p>
+        </div>
+        <div class="post-body" style="margin-top: 3rem;
+        ">
+          {{ posts.body|safe }}
+        </div>
+    
+        <p>
+            <a href="{% url 'blog:post_share' posts.id %}">Share post</a>
+            Share this post
+            </a>
+        </p>
+        <br>
+        <h2>Similar posts</h2>
+        {% for post in similar_posts %}
+            {% if post.title != posts.title %}
+            <p>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </p>
+            {% endif %}
+            {% empty %}
+            There are no similar posts yet.
+        {% endfor %}
+    
+        <br>
+        {% with comments.count as total_comments %}
+            <h2>
+                {{ total_comments }} comment{{ total_comments|pluralize }}
+            </h2>
+        {% endwith %}
+    
+    
+        {% if new_comment %}
+            <h2>Your comment has been added.</h2>
+            {% else %}
+            <h2>Add a new comment</h2>
+            <form method="post" style="width: 70%;">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <button class=" btn btn-sm btn-primary mb-3" type="submit" href>Add comment</button>
+            </form>
+        {% endif %}
+    
+        <br>
+        
+        <div class="list-group w-auto">
+          <h5>Comments</h5>
+          {% for comment in comments %}
+          <div href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3 rounded comments" style="margin-bottom: 1rem; width: 80%;" aria-current="true">
+            <div class=" text-center">
+              <a class="text-dark" href="#">Large</a>
+            </div>
+              <div class="d-flex gap-2 w-100 justify-content-between">
+              <div>
+                <h6 class="mb-0">{{ comment.name }}</h6>
+                <p class="mb-0 opacity-75">{{ comment.body|linebreaks }}</p>
+              </div>
+              <small class="opacity-50 text-nowrap">{{ comment.created|timesince}} ago</small>
+            </div>
+          </div>
+          {% empty %}
+          <p>There are no comments yet.</p>
+          {% endfor %}
+        </div>
+
+        <br>
+
+      </div>
+  
+      <div class="col-md-4">
+        <div class="position-sticky" style="top: 2rem;">
+          <div class="border-bottom">
+            <div class="p-4 mb-3 bg-light rounded shadow">
+              <h4 class="fst-italic">The Author: {{ posts.author }}</h4>
+              <p class="mb-0">{{post.authors_comment}}</p>
+            </div>
+          </div>
+          <br> 
+          <div class="p-4 mb-3 bg-light rounded shadow">
+            <h4 class="fst-italic">Details</h4>
+
+            <ul class="details">
+              <li>Author: {{ posts.author }}</li>
+              <li>Date: {{ posts.created }}</li>
+              <li>Views: {{ posts.views }}</li>
+              <li>Tags: 
+                {% for tag in tag_list %}
+                    {{ tag.name }}
+                    {% if not forloop.last %} ,{% endif %}
+
+                {% endfor %}
+              </li>
+            </ul>
+            
+          </div>
+
+          <div class="p-4">
+            <h4 class="fst-italic">Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ol>
+          </div>
+  
+          <div class="container">
+            <footer class="py-3 my-4">
+              <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="{% url 'blog:homepage' %}" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+                <li class="nav-item"><a href="{% url 'blog:post_list' %}" class="nav-link px-2 text-muted">List</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+              </ul>
+              <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </main>
+
+{% endblock %}

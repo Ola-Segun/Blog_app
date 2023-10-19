@@ -1,0 +1,43 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% load blog_tags %}
+{% load i18n %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="topic">
+        <h4>Create a new post : </h4>Let your community know your mind.
+    </div>
+
+    <br>
+
+    <h1>{{ form_title }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <!-- <div class="form-group">
+            <label for="{{ form.tags.id_for_label }}">Tags:</label>
+            <select name="{{ form.tags.html_name }}" id="{{ form.tags.id_for_label }}" class="form-control">
+              {% for tag in form.tags.field.queryset %}
+                <option value="{{ tag.pk }}">{{ tag.name }}</option>
+              {% endfor %}
+            </select>
+        </div> -->
+        <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+    </form>
+</div>
+
+
+{% block javascript %}
+    <script src="{% static 'slug.js' %}"></script>
+    <!-- <script>
+        document.getElementById("id_title").addEventListener("keyup", createSlug);
+    </script> -->
+{% endblock %}
+
+{% endblock %}

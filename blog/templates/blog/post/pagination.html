@@ -1,0 +1,25 @@
+    <style>
+        .page-butt {
+    padding: 5px;
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #6f6f6f;
+    }
+    </style>
+
+    <div class="pagination">
+            <span class="step-links">
+            {% if posts.has_previous %}
+                <!-- <a class="page-butt" href="?page=1">first</a> -->
+                <a class="page-butt" href="?page={{ posts.previous_page_number }}">Prev</a>
+            {% endif %}
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+            </span>
+            {% if posts.has_next %}
+                <a class="page-butt" href="?page={{ posts.next_page_number }}">Next</a>
+                <!-- <a class="page-butt" href="?page={{ posts.paginator.num_pages }}">last</a> -->
+            {% endif %}
+        </span>
+    </div>

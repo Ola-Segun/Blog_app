@@ -1,0 +1,131 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+<style>
+  .page-butt{
+      padding: 5px;
+      border: 2px solid darkgray;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #6f6f6f;
+  }
+  .page-butt:hover{
+      color: #4e4e4e;
+  }
+</style>
+
+{% block title %}List{% endblock %}
+
+<link rel="stylesheet" href="{% static 'features.css' %}">
+{% block content %}
+
+{% if view == "post_list_by_month" %}
+
+  <h1>Posts for {{ selected_month|date:"M Y" }}</h1>
+
+
+{% endif %}
+
+<div class="container px-4 py-5" id="custom-cards">
+    <h4 class="pb-2 border-bottom">Thanks to the creators, we have {% total_posts %} posts so far.</h4>
+    
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+      {% for post in posts %}
+      <div class="col" style="margin-bottom: 1.5rem;">
+        {% if post.image %}
+        <div style="border: none; background-size: cover; background-position: center; background-image: url({{ post.image.url }});" class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-4 shadow-lg">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+              <a href="{% url 'blog:post_details' post.publish.year post.publish.month post.publish.day post.slug %}" style=" text-shadow:2px 1px 4px #a1a1a1; text-decoration: none; color: white;">{{post.title}}</a>
+            </h2>
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="me-auto">
+                <p>{{post.author}}</p>
+              </li>
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                <small>
+                  <p>
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:post_list_by_tag' tag.slug %}" style="text-decoration: none; color: rgb(255, 255, 255);">
+                            {{ tag.name }}  
+                        </a>
+                        {% if not forloop.last %} ,{% endif %}
+            
+                    {% endfor %}
+                </p>
+                </small>
+              </li>
+              <li class="d-flex align-items-center">
+                  <!-- <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg> -->
+                  <!-- <small class="fas fa-calender" style="text-shadow:1px 2px #5a5a5a;">{{ post.created|date:"d M" }}</small> -->
+                  <small>{{ post.created|date }}</small>
+                </li>
+              </ul>
+          </div>
+        </div>
+          {% else %}
+          <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-4 shadow-lg" style="background-image: url('unsplash-photo-1.jpg');">
+
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+        
+                <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                  <a href="{% url 'blog:post_details' post.publish.year post.publish.month post.publish.day post.slug %}" style="text-decoration: none; color: white;">{{post.title}}</a>
+                </h2>
+                <ul class="d-flex list-unstyled mt-auto">
+                  <li class="me-auto">
+                    <p>{{post.author}}</p>
+                  </li>
+                  <li class="d-flex align-items-center me-3">
+                    <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                    <small>
+                      <p>
+                        {% for tag in post.tags.all %}
+                            <a href="{% url 'blog:post_list_by_tag' tag.slug %}" style="text-decoration: none; color: rgb(255, 255, 255);">
+                                {{ tag.name }}
+                            </a>
+                            {% if not forloop.last %} ,{% endif %}
+                            
+                        {% endfor %}  
+                    </p>
+                    </small>
+                  </li>
+                  <li class="d-flex align-items-center">
+                      <!-- <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg> -->
+                      <small >{{ post.created|date }}</small>
+                    </li>
+                  </ul>
+              </div>
+        
+        </div>
+          {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="container">
+      <div class="pagination">
+        {% include "blog/post/pagination.html" with page=posts %}
+      </div>
+
+    </div>
+
+    <div class="container">
+      <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+          <li class="nav-item"><a href="{% url 'blog:homepage' %}" class="nav-link px-2 text-muted">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+          <li class="nav-item"><a href="{% url 'blog:post_list' %}" class="nav-link px-2 text-muted">List</a></li>
+          <li class="nav-item"><a href="{% url 'blog:profile' %}" class="nav-link px-2 text-muted">My profile</a></li>
+        </ul>
+        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
+      </footer>
+    </div>
+</div>
+
+
+{% endblock %}

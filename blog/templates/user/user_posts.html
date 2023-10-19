@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+{% load blog_tags %}
+{% load i18n %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+
+
+<h2>Published Posts</h2>
+{% if published_posts %}
+    <ul>
+    {% for post in published_posts %}
+        <li>
+            <a href="{% url 'blog:post_details' post.publish.year post.publish.month post.publish.day post.slug %}">{{post.title}}</a>
+        </li>
+
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no published posts.</p>
+{% endif %}
+
+<h2>Draft Posts</h2>
+{% if draft_posts %}
+    <ul>
+    {% for post in draft_posts %}
+        <li><h5>{{ post.title }}</h5></li>
+            <a href="{% url 'blog:postdelete'  post.id %}" class="btn btn-danger" style="text-decoration: none;">Delete post</a>
+            <a href="{% url 'blog:postupdate' post.id %}" class="btn btn-success">Update post</a>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no draft posts.</p>
+{% endif %}
+
+<p></p>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+
+{% block content %}
+
+<style>
+    *{
+    margin: 0;
+    padding: 0;
+
+}
+
+
+hr{
+    width: 80%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.hero{
+    width: auto;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+/* .container{
+    border-left: 1px rgb(148, 148, 148);
+    border-right: 1px rgb(148, 148, 148);
+    padding: 30px;
+} */
+
+.column{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/* .wrap{
+
+   
+} */
+
+.box{
+    width: 20rem;
+    height: auto ;
+    justify-items: center;
+    display: grid;
+    padding: 15px;
+    margin: 0px, 30px;
+    background-color: rgba(190, 255, 254, 0.481);
+    box-shadow:2px 2px 4px rgb(214, 214, 214);
+    transition: box-shadow 250ms ease-in-out,
+                transform 250ms ease-in-out;
+    margin-right: 20px;
+    margin-top: 20px;
+    border-radius: 7px;
+
+}
+
+.box:hover{
+    box-shadow:3px 3px 13px rgb(214, 214, 214);
+    transform: scale(1.01);
+}
+
+.top{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-bottom: 10px;
+}
+ 
+img{
+    width: 150px;
+    /* height: 150px; */
+    border-radius: 10px;
+    border: 1px rgb(135, 135, 135);
+}
+
+.info{
+    display: grid;
+    align-content: baseline;
+    margin-top: auto;
+    padding-left: 20px;
+    justify-items: end;
+}
+
+.date{
+    padding-bottom: 69px;
+}
+ 
+.comments{
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+</style>
+
+<!-- {% if messages %}
+<div class="alert alert-success">
+  {% for message in messages %}
+    {{ message }}
+  {% endfor %}
+</div>
+{% endif %} -->
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ messages.tags }} alert alert-dismissible fade show">
+            {{ message|safe }}
+            <a href="" class="btn-close">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="profile form-container row  align-items-center justify-content-center" style="width: 100%;">
+    <div class="row g-4" style="width: 90%; justify-content:center;">
+        
+
+        <div class="col-md-5 col-lg-5">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">Your Profile</h4>
+            <div class="box">
+                    <figure class="image">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="">
+                        {% else %}
+                            <ul>
+                                <li style="text-decoration: none;"><h4>Update your profile picture.</h4></li>
+                            </ul>
+                        {% endif %}
+                    </figure>
+                <div class="info">
+                    <div class="prop">
+                        <h4 class="name">{{ profile.user }} {{profile.user.last_name}}</h4>
+                        <p class="email">{{ request.user.email }}</p>
+                        <p class="email">{{ profile.date_of_birth }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <form action="" method="post" enctype="multipart/form-data" class="row g-3 col-lg-4 align-items-center justify-content-center order-md-last">
+            <h5 class="d-flex justify-content-between align-items-center mb-3">Edit your Profile</h5>
+            {% csrf_token %}
+            {{ user_form }}
+            {{ profile_form }}
+            <button class="w-50 btn btn-lg btn-primary" type="submit">Save</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <footer class="py-3 my-4">
+          <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="{% url 'blog:homepage' %}" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            <li class="nav-item"><a href="{% url 'blog:post_list' %}" class="nav-link px-2 text-muted">List</a></li>
+            <li class="nav-item"><a href="{% url 'blog:profile' %}" class="nav-link px-2 text-muted">My profile</a></li>
+        </ul>
+          <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
+        </footer>
+      </div>
+</div>
+
+{% endblock %}

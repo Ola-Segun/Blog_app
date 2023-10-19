@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h1>Posts for {{ date:"M Y" }}</h1>
+
+  <ul>
+    {% for post in posts %}
+      <li>
+        <a href="{{ post.get_absolute_url }}">
+          {{ post.title }}
+        </a>
+        <small class="text-muted">
+          {{ post.publish|date:"M d, Y" }}
+        </small>
+      </li>
+    {% empty %}
+      <li>No posts found.</li>
+    {% endfor %}
+  </ul>
+
+  <hr>
+
+  
+  <div class="container">
+    <div class="pagination">
+      {% include "blog/post/pagination.html" with page=posts %}
+    </div>
+
+  </div>
+
+
+{% endblock %}

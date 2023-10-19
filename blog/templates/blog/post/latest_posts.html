@@ -1,0 +1,61 @@
+
+<style>
+  figure{
+    display: grid;
+    align-content: center;
+    height: 100%;
+  }
+  .tag{
+    text-decoration: none;
+    color:#858585;
+  }
+  .tag:hover{
+    color:#575757;
+  }
+</style>
+
+<div class="row">
+      
+    <h3>
+      Latest Posts:
+    </h3>
+    {% for post in latest_posts %}
+    <div class="col-md-9">
+      
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">
+            <p>
+                Tags:
+                {% for tag in post.tags.all %}
+                    <a href="{% url 'blog:post_list_by_tag' tag.slug %}" class="tag" style="text-decoration: none; color:#858585;">
+                        {{ tag.name }}
+                    </a>
+                    {% if not forloop.last %}, {% endif %}
+        
+                {% endfor %}
+            </p>
+          </strong>
+          <a href="{{ post.get_absolute_url }}" class="" style="text-decoration: none; color: inherit;">
+            <h3 class="mb-0">{{post.title}}</h3>
+          </a>
+          <div class="mb-1 text-muted">{{ post.created }}</div>
+          {% if post.body %}
+          <p class="card-text mb-auto">{{ post.body|truncatewords:7|linebreaks|safe }}</p>
+          {% endif %}
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          {% if post.image %}
+
+          <a href="{{ post.get_absolute_url }}" class="" style="text-decoration: none; color: inherit;">
+            <figure class="" style=" background-image: url({{ post.image.url }});">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 17rem;">
+            </figure>
+          </a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,7 @@
+<h2>Most viewed posts</h2>
+<ul>
+{% get_most_viewed_posts as popular_posts %}
+{% for post in popular_posts %}
+    <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+{% endfor %}
+</ul>
